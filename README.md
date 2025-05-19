@@ -89,3 +89,26 @@ La información de cada usuario se guarda en la colección `users` con los sigui
 5. Inicia sesión y accede a las funcionalidades según tu rol.
 6. Si eres administrador, prueba el panel de envío de notificaciones, ademas de las funcionalidades del usuario normal.
 7. Como usuario normal, edita tu perfil, revisa tus notificaciones, y elimina el historial si lo deseas.
+
+---
+
+## Explicación de la implementación de autenticación
+
+La autenticación en la aplicación se implementó utilizando Firebase Authentication con el método de correo electrónico y contraseña.
+Los usuarios pueden registrarse como usuarios normales o administradores, y según su rol, la app redirige al panel correspondiente.
+Durante el inicio de sesión:
+Se valida el correo y contraseña.
+Se recupera el rol del usuario desde Firestore.
+Se guarda el token FCM en la base de datos para el envío de notificaciones.
+Esto permite separar funciones y pantallas para cada tipo de usuario de manera segura y dinámica.
+
+## Explicación del sistema de notificaciones
+
+El sistema de notificaciones push se realiza con Firebase Cloud Messaging (FCM) y Cloud Functions:
+Cuando el usuario se registra o inicia sesión, se guarda su token FCM en Firestore.
+Desde el panel del administrador, se puede enviar una notificación:
+A un usuario específico (usando radio button).
+A múltiples usuarios seleccionados (opcionalmente con checkbox).
+La función sendNotification en Firebase Functions toma el token, título y mensaje, envía la notificación y guarda el historial en Firestore.
+Tanto administradores como usuarios pueden visualizar las notificaciones recibidas en un historial dentro de la app.
+Este sistema permite comunicación directa en tiempo real con los usuarios autenticados.
